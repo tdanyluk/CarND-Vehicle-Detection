@@ -27,13 +27,19 @@ def draw_labeled_bboxes(img, labels):
     # Return the image
     return img
 
-def convert_color(img, conv='RGB2YCrCb'):
-    if conv == 'RGB2YCrCb':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
-    if conv == 'BGR2YCrCb':
-        return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
-    if conv == 'RGB2LUV':
+def convert_color(img, color_space):
+    if color_space == 'RGB':
+        return np.copy(img)
+    elif color_space == 'HSV':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    elif color_space == 'LUV':
         return cv2.cvtColor(img, cv2.COLOR_RGB2LUV)
+    elif color_space == 'HLS':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+    elif color_space == 'YUV':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
+    elif color_space == 'YCrCb':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
 
 # Define a function to extract features from a single image window
 # This function is very similar to extract_features()
@@ -238,11 +244,11 @@ def draw_boxes(img, bboxes, color=(0, 0, 1), thick=6):
     return imcopy
 
 # Define a single function that can extract features using hog sub-sampling and make predictions
-def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins, cell_per_step):
+def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins, cell_per_step, color_space):
     draw_img = np.copy(img)
     
     img_tosearch = img[ystart:ystop,:,:]
-    ctrans_tosearch = convert_color(img_tosearch, conv='RGB2YCrCb')
+    ctrans_tosearch = convert_color(img_tosearch, color_space)
     if scale != 1:
         imshape = ctrans_tosearch.shape
         ctrans_tosearch = cv2.resize(ctrans_tosearch, (np.int(imshape[1]/scale), np.int(imshape[0]/scale)))

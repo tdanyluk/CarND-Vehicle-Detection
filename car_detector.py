@@ -15,6 +15,7 @@ from scipy.ndimage.measurements import label
 
 import lesson_functions
 
+
 class CarDetector:
     def __init__(self):
         self.random_seed = 19920828
@@ -119,7 +120,8 @@ class CarDetector:
 
     def _find_cars(self, img, ystart, ystop, scale):
         return lesson_functions.find_cars(img, ystart, ystop, scale, self.svc, self.scaler, self.orient,
-                                          self.pix_per_cell, self.cell_per_block, self.spatial_size, self.hist_bins, self.cell_per_step)
+                                          self.pix_per_cell, self.cell_per_block, self.spatial_size, self.hist_bins, self.cell_per_step,
+                                          self.color_space)
 
     def calculate_car_rectangles(self, image):
         rects = []
@@ -221,8 +223,8 @@ class CarDetector:
         return img
 
     def visualise_hog(self, car, not_car):
-        car = cv2.cvtColor(car, cv2.COLOR_RGB2YCrCb)
-        not_car = cv2.cvtColor(not_car, cv2.COLOR_RGB2YCrCb)
+        car = lesson_functions.convert_color(car, self.color_space)
+        not_car = lesson_functions.convert_color(not_car, self.color_space)
 
         images = []
         titles = []
@@ -273,6 +275,7 @@ class CarDetector:
         car_detector.visualise([bounds], [""], cell_width=6,
                                cols=1, cmap='gray', target="output_images/bounds.png")
 
+
 car_detector = CarDetector()
 
 # Uncomment these lines to regenerate training features and refit the model
@@ -284,8 +287,8 @@ car_detector.load_classifier()
 car_detector.visualise_sliding_window("test_images/for_sliding_window/*.png")
 car_detector.visualise_heatmaps("test_images/sequence/*.png")
 
-car_detector.process_video("test_video.mp4", "test_video_out.mp4")
-#car_detector.process_video("project_video.mp4", "project_video_out.mp4")
+#car_detector.process_video("test_video.mp4", "test_video_out.mp4")
+car_detector.process_video("project_video.mp4", "project_video_out.mp4")
 
 # Uncomment for profiling
 #import cProfile
