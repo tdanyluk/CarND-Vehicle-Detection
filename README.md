@@ -37,7 +37,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in CarDetector::extract_training_features (car_detector.py lines TODO to TODO).
+The code for this step is contained in CarDetector::extract_training_features (car_detector.py lines 67 to 101).
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -59,13 +59,13 @@ Cells_per_block is big enough to enable multiple grouping of cells when normaliz
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using hog, spatial and color histogram features in CarDetector::fit_classifier (car_detector.py lines TODO to TODO).
+I trained a linear SVM using hog, spatial and color histogram features in CarDetector::fit_classifier (car_detector.py lines 107 to 115).
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I did the sliding window search in CarDetector::calculate_car_rectangles (car_detector.py lines TODO to TODO).
+I did the sliding window search in CarDetector::calculate_car_rectangles (car_detector.py lines 126 to 131).
 Actually it is just a function that calls the find_cars function from the lessons.
 
 I decided to use 3 scales: 64x64, 96x96 and 128x128, with 75% overlap.
@@ -90,7 +90,7 @@ Here's a [link to my video result](./project_video_out.mp4)
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.
 
-The corresponding code is CarDetector::_process_frame (car_detector.py lines TODO to TODO)
+The corresponding code is CarDetector::_process_frame (car_detector.py lines 174 to 185)
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
